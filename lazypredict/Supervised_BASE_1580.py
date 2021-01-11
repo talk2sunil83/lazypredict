@@ -2,9 +2,7 @@
 Supervised Models
 """
 # Author: Shankar Rao Pandala <shankar.pandala@live.com>
-# Contributors: Sunil Yadav <yadav.sunil83@gmail.com> |
-from typing import Any
-from joblib import dump
+
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -146,17 +144,6 @@ def get_card_split(df, cols, n=11):
     card_low = cols[~cond]
     return card_low, card_high
 
-def save_model(name: str, model: Any, base_path: str = "", overwrite: bool = True) -> None:
-    """Save trained model at specific location
-
-    Args:
-        name (str): model name
-        model (Any): model object
-        base_path (str): base path to store model
-        overwrite (bool): overwrite old model file
-    """
-    file_name = f"{name.strip().lower()}.mdl" if overwrite else f"{name.strip().lower()}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.mdl"
-    dump(model, filename=file_name if base_path == "" else str(base_path/file_name))
 
 # Helper class for performing classification
 
@@ -175,13 +162,7 @@ class LazyClassifier:
         When function is provided, models are evaluated based on the custom evaluation metric provided.
     prediction : bool, optional (default=False)
         When set to True, the predictions of all the models models are returned as dataframe.
-    save_model: bool, optional (default=False)
-        Save trained model for further analysis for example feature importance
-    base_path: str, optional (default="")
-        Base path to store model files (with .mdl extension, joblib.load(base_path/<model file name>.mdl) could be use to load stored model)
-    overwrite: bool, optional (default=True)
-        Overwrite old model file
-        
+
     Examples
     --------
     >>> from lazypredict.Supervised import LazyClassifier
@@ -236,9 +217,6 @@ class LazyClassifier:
         custom_metric=None,
         predictions=False,
         random_state=42,
-        save_model: bool = False,
-        base_path: str = "",
-        overwrite: bool = True,
     ):
         self.verbose = verbose
         self.ignore_warnings = ignore_warnings
@@ -246,9 +224,6 @@ class LazyClassifier:
         self.predictions = predictions
         self.models = {}
         self.random_state = random_state
-        self.save_model = save_model
-        self.base_path = base_path
-        self. overwrite = overwrite
 
     def fit(self, X_train, X_test, y_train, y_test):
         """Fit Classification algorithms to X_train and y_train, predict and score on X_test, y_test.
@@ -368,8 +343,6 @@ class LazyClassifier:
                         )
                 if self.predictions:
                     predictions[name] = y_pred
-                if self.save_model:
-                    save_model(name, pipe['classifier'], self.base_path, self.overwrite)
             except Exception as exception:
                 if self.ignore_warnings is False:
                     print(name + " model failed to execute")
@@ -426,12 +399,12 @@ class LazyClassifier:
         Returns
         -------
         models: dict-object,
-            Returns a dictionary with each model pipeline as value
+            Returns a dictionary with each model pipeline as value 
             with key as name of models.
         """
         if len(self.models.keys()) == 0:
-            self.fit(X_train, X_test, y_train, y_test)
-
+            self.fit(X_train,X_test,y_train,y_test)
+        
         return self.models
 
 
@@ -452,13 +425,7 @@ class LazyRegressor:
         When function is provided, models are evaluated based on the custom evaluation metric provided.
     prediction : bool, optional (default=False)
         When set to True, the predictions of all the models models are returned as dataframe.
-    save_model: bool, optional (default=False)
-        Save trained model for further analysis for example feature importance
-    base_path: str, optional (default="")
-        Base path to store model files (with .mdl extension, joblib.load(base_path/<model file name>.mdl) could be use to load stored model)
-    overwrite: bool, optional (default=True)
-        Overwrite pre-existing model files
-        
+
     Examples
     --------
     >>> from lazypredict.Supervised import LazyRegressor
@@ -471,7 +438,7 @@ class LazyRegressor:
     >>> offset = int(X.shape[0] * 0.9)
     >>> X_train, y_train = X[:offset], y[:offset]
     >>> X_test, y_test = X[offset:], y[offset:]
-    >>> reg = LazyRegressor(verbose=0,ignore_warnings=False, custom_metric=None )
+    >>> reg = LazyRegressor(verbose=0,ignore_warnings=False, custom_metric=None )    
     >>> models,predictions = reg.fit(X_train, X_test, y_train, y_test)
     >>> model_dictionary = clf.provide_models(X_train,X_test,y_train,y_test)
     >>> models
@@ -522,9 +489,6 @@ class LazyRegressor:
         custom_metric=None,
         predictions=False,
         random_state=42,
-        save_model: bool = False,
-        base_path: str = "",
-        overwrite: bool = True,
     ):
         self.verbose = verbose
         self.ignore_warnings = ignore_warnings
@@ -532,9 +496,6 @@ class LazyRegressor:
         self.predictions = predictions
         self.models = {}
         self.random_state = random_state
-        self.save_model = save_model
-        self.base_path = base_path
-        self. overwrite = overwrite
 
     def fit(self, X_train, X_test, y_train, y_test):
         """Fit Regression algorithms to X_train and y_train, predict and score on X_test, y_test.
@@ -639,8 +600,6 @@ class LazyRegressor:
                         )
                 if self.predictions:
                     predictions[name] = y_pred
-                if self.save_model:
-                    save_model(name, pipe['regressor'], self.base_path, self.overwrite)
             except Exception as exception:
                 if self.ignore_warnings is False:
                     print(name + " model failed to execute")
@@ -687,11 +646,11 @@ class LazyRegressor:
         Returns
         -------
         models: dict-object,
-            Returns a dictionary with each model pipeline as value
+            Returns a dictionary with each model pipeline as value 
             with key as name of models.
         """
         if len(self.models.keys()) == 0:
-            self.fit(X_train, X_test, y_train, y_test)
+            self.fit(X_train,X_test,y_train,y_test)
 
         return self.models
 

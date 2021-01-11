@@ -249,7 +249,7 @@ class LazyClassifier:
         self.save_model = save_model
         self.base_path = base_path
         self. overwrite = overwrite
-
+        
     def fit(self, X_train, X_test, y_train, y_test):
         """Fit Classification algorithms to X_train and y_train, predict and score on X_test, y_test.
         Parameters
@@ -431,7 +431,7 @@ class LazyClassifier:
         """
         if len(self.models.keys()) == 0:
             self.fit(X_train, X_test, y_train, y_test)
-
+        
         return self.models
 
 

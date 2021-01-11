@@ -158,6 +158,18 @@ def save_model(name: str, model: Any, base_path: str = "", overwrite: bool = Tru
     file_name = f"{name.strip().lower()}.mdl" if overwrite else f"{name.strip().lower()}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.mdl"
     dump(model, filename=file_name if base_path == "" else str(base_path/file_name))
 
+def save_model(name: str, model: Any, base_path: str = "", overwrite: bool = True) -> None:
+    """Save trained model at specific location
+
+    Args:
+        name (str): model name
+        model (Any): model object
+        base_path (str): base path to store model
+        overwrite (bool): overwrite old model file
+    """
+    file_name = f"{name.strip().lower()}.mdl" if overwrite else f"{name.strip().lower()}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.mdl"
+    dump(model, filename=file_name if base_path == "" else str(base_path/file_name))
+
 # Helper class for performing classification
 
 
@@ -179,9 +191,12 @@ class LazyClassifier:
         Save trained model for further analysis for example feature importance
     base_path: str, optional (default="")
         Base path to store model files (with .mdl extension, joblib.load(base_path/<model file name>.mdl) could be use to load stored model)
+<<<<<<< HEAD
     overwrite: bool, optional (default=True)
         Overwrite old model file
         
+=======
+>>>>>>> 5cdf53e0e161069de95038215238fcd7adfa0612
     Examples
     --------
     >>> from lazypredict.Supervised import LazyClassifier
@@ -249,7 +264,11 @@ class LazyClassifier:
         self.save_model = save_model
         self.base_path = base_path
         self. overwrite = overwrite
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> 5cdf53e0e161069de95038215238fcd7adfa0612
     def fit(self, X_train, X_test, y_train, y_test):
         """Fit Classification algorithms to X_train and y_train, predict and score on X_test, y_test.
         Parameters
@@ -266,6 +285,8 @@ class LazyClassifier:
         y_test : array-like,
             Testing vectors, where rows is the number of samples
             and columns is the number of features.
+        overwrite: bool, optional (default=True)
+            Overwrite pre-existing model files
         Returns
         -------
         scores : Pandas DataFrame
@@ -368,7 +389,11 @@ class LazyClassifier:
                         )
                 if self.predictions:
                     predictions[name] = y_pred
+<<<<<<< HEAD
                 if self.save_model:
+=======
+                if self.save_model == True:
+>>>>>>> 5cdf53e0e161069de95038215238fcd7adfa0612
                     save_model(name, pipe['classifier'], self.base_path, self.overwrite)
             except Exception as exception:
                 if self.ignore_warnings is False:
@@ -431,7 +456,11 @@ class LazyClassifier:
         """
         if len(self.models.keys()) == 0:
             self.fit(X_train, X_test, y_train, y_test)
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> 5cdf53e0e161069de95038215238fcd7adfa0612
         return self.models
 
 
@@ -458,7 +487,10 @@ class LazyRegressor:
         Base path to store model files (with .mdl extension, joblib.load(base_path/<model file name>.mdl) could be use to load stored model)
     overwrite: bool, optional (default=True)
         Overwrite pre-existing model files
+<<<<<<< HEAD
         
+=======
+>>>>>>> 5cdf53e0e161069de95038215238fcd7adfa0612
     Examples
     --------
     >>> from lazypredict.Supervised import LazyRegressor
@@ -639,7 +671,11 @@ class LazyRegressor:
                         )
                 if self.predictions:
                     predictions[name] = y_pred
+<<<<<<< HEAD
                 if self.save_model:
+=======
+                if self.save_model == True:
+>>>>>>> 5cdf53e0e161069de95038215238fcd7adfa0612
                     save_model(name, pipe['regressor'], self.base_path, self.overwrite)
             except Exception as exception:
                 if self.ignore_warnings is False:

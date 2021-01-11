@@ -146,6 +146,7 @@ def get_card_split(df, cols, n=11):
     card_low = cols[~cond]
     return card_low, card_high
 
+
 def save_model(name: str, model: Any, base_path: str = "", overwrite: bool = True) -> None:
     """Save trained model at specific location
 
@@ -179,9 +180,6 @@ class LazyClassifier:
         Save trained model for further analysis for example feature importance
     base_path: str, optional (default="")
         Base path to store model files (with .mdl extension, joblib.load(base_path/<model file name>.mdl) could be use to load stored model)
-    overwrite: bool, optional (default=True)
-        Overwrite old model file
-        
     Examples
     --------
     >>> from lazypredict.Supervised import LazyClassifier
@@ -266,6 +264,8 @@ class LazyClassifier:
         y_test : array-like,
             Testing vectors, where rows is the number of samples
             and columns is the number of features.
+        overwrite: bool, optional (default=True)
+            Overwrite pre-existing model files
         Returns
         -------
         scores : Pandas DataFrame
@@ -368,7 +368,7 @@ class LazyClassifier:
                         )
                 if self.predictions:
                     predictions[name] = y_pred
-                if self.save_model:
+                if self.save_model == True:
                     save_model(name, pipe['classifier'], self.base_path, self.overwrite)
             except Exception as exception:
                 if self.ignore_warnings is False:
@@ -426,7 +426,7 @@ class LazyClassifier:
         Returns
         -------
         models: dict-object,
-            Returns a dictionary with each model pipeline as value
+            Returns a dictionary with each model pipeline as value 
             with key as name of models.
         """
         if len(self.models.keys()) == 0:
@@ -458,7 +458,6 @@ class LazyRegressor:
         Base path to store model files (with .mdl extension, joblib.load(base_path/<model file name>.mdl) could be use to load stored model)
     overwrite: bool, optional (default=True)
         Overwrite pre-existing model files
-        
     Examples
     --------
     >>> from lazypredict.Supervised import LazyRegressor
@@ -471,7 +470,7 @@ class LazyRegressor:
     >>> offset = int(X.shape[0] * 0.9)
     >>> X_train, y_train = X[:offset], y[:offset]
     >>> X_test, y_test = X[offset:], y[offset:]
-    >>> reg = LazyRegressor(verbose=0,ignore_warnings=False, custom_metric=None )
+    >>> reg = LazyRegressor(verbose=0,ignore_warnings=False, custom_metric=None )    
     >>> models,predictions = reg.fit(X_train, X_test, y_train, y_test)
     >>> model_dictionary = clf.provide_models(X_train,X_test,y_train,y_test)
     >>> models
@@ -639,7 +638,7 @@ class LazyRegressor:
                         )
                 if self.predictions:
                     predictions[name] = y_pred
-                if self.save_model:
+                if self.save_model == True:
                     save_model(name, pipe['regressor'], self.base_path, self.overwrite)
             except Exception as exception:
                 if self.ignore_warnings is False:
@@ -687,7 +686,7 @@ class LazyRegressor:
         Returns
         -------
         models: dict-object,
-            Returns a dictionary with each model pipeline as value
+            Returns a dictionary with each model pipeline as value 
             with key as name of models.
         """
         if len(self.models.keys()) == 0:
